@@ -11,7 +11,7 @@ ok() { echo "✅ $*"; }
 nao() { echo "⏭️  $*"; }
 alerta() { echo "⚠️  $*"; }
 
-echo "testar-pr — diagnóstico ($(date '+%d/%m/%Y %H:%M'))"
+echo "pr-audit — diagnóstico ($(date '+%d/%m/%Y %H:%M'))"
 [ -f "$CONFIG_FILE" ] || alerta "sem configuração; rode $SKILL_DIR/configurar.sh (seguindo só com o que for detectado)"
 
 # Projeto
@@ -64,7 +64,7 @@ if [ "${TELA_ATIVA:-1}" = 0 ]; then
   nao "tela: desligada na configuração → roteiro manual"
 elif tem node && [ -d "$SKILL_DIR/node_modules/playwright-core" ]; then
   exe=$(cd "$SKILL_DIR" && node -e "try{console.log(require('playwright-core').chromium.executablePath())}catch(e){}" 2>/dev/null)
-  if [ -n "${TESTAR_PR_CHROMIUM:-}" ] || { [ -n "$exe" ] && [ -x "$exe" ]; }; then
+  if [ -n "${PR_AUDIT_CHROMIUM:-}" ] || { [ -n "$exe" ] && [ -x "$exe" ]; }; then
     ok "tela: Playwright e Chromium prontos"; CAP="$CAP,tela"
     if curl -s -m 2 "http://127.0.0.1:$QA_PORTA/json/version" >/dev/null 2>&1; then ok "tela: navegador de QA aberto na porta $QA_PORTA"; fi
   else

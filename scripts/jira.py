@@ -23,7 +23,7 @@ import sys
 import urllib.error
 import urllib.request
 
-CONFIG = os.path.join(os.environ.get("TESTAR_PR_CONFIG_DIR", os.path.expanduser("~/.config/testar-pr")), "config.env")
+CONFIG = os.path.join(os.environ.get("PR_AUDIT_CONFIG_DIR", os.path.expanduser("~/.config/pr-audit")), "config.env")
 
 
 def ler_config():

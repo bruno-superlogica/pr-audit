@@ -1,9 +1,9 @@
-// Navegador de QA próprio (Chromium do Playwright, perfil em ~/.config/testar-pr), com porta de depuração
+// Navegador de QA próprio (Chromium do Playwright, perfil em ~/.config/pr-audit), com porta de depuração
 // para os outros scripts conectarem. O login fica salvo no perfil entre sessões.
 // Uso: node scripts/tela/navegador.mjs abrir [url]   abre (recusa se a porta estiver ocupada por outro processo)
 //      node scripts/tela/navegador.mjs estado        mostra se está aberto e as abas
 //      node scripts/tela/navegador.mjs fechar        fecha o navegador aberto por este script
-// Variáveis: QA_PORTA (padrão 9447), TELA_HEADLESS=1 (sem janela), TESTAR_PR_CHROMIUM (outro executável).
+// Variáveis: QA_PORTA (padrão 9447), TELA_HEADLESS=1 (sem janela), PR_AUDIT_CHROMIUM (outro executável).
 import {spawn} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,7 +26,7 @@ if (cmd === 'abrir') {
       : `Porta ${cfg.QA_PORTA} ocupada por outro navegador. Use outra: QA_PORTA=9448 node scripts/tela/navegador.mjs abrir`);
     process.exit(meu ? 0 : 1);
   }
-  const exe = process.env.TESTAR_PR_CHROMIUM || chromium.executablePath();
+  const exe = process.env.PR_AUDIT_CHROMIUM || chromium.executablePath();
   if (!fs.existsSync(exe)) { console.error(`Chromium não encontrado em ${exe}. Rode: npx playwright install chromium`); process.exit(2); }
   fs.mkdirSync(perfil, {recursive: true});
   const args = [`--remote-debugging-port=${cfg.QA_PORTA}`, `--user-data-dir=${perfil}`, '--no-first-run', '--no-default-browser-check',

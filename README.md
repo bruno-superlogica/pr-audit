@@ -1,6 +1,6 @@
-# testar-pr
+# pr-audit
 
-Skill de apoio a QA para testar PRs do **apps** (ERP imobiliário). Funciona no **Codex CLI** e no **Claude Code**.
+Skill **pr-audit**: apoio a QA para testar PRs do **apps** (ERP imobiliário). Funciona no **Codex CLI** e no **Claude Code**.
 
 A partir do card do Jira e da PR, ela monta os cenários (incluindo impacto no código), gera plano e roteiro de teste, roda PHPUnit antes x depois, confere no banco local, executa passos de tela com Playwright quando o QA quiser e prepara o comentário de QA no card.
 
@@ -18,15 +18,17 @@ A partir do card do Jira e da PR, ela monta os cenários (incluindo impacto no c
 ## Instalação (Linux)
 
 ```bash
-git clone https://github.com/bruno-superlogica/pr-audit.git ~/ferramentas/testar-pr
-cd ~/ferramentas/testar-pr
+git clone https://github.com/bruno-superlogica/pr-audit.git ~/ferramentas/pr-audit
+cd ~/ferramentas/pr-audit
 ./instalar.sh
 ```
+
+Com chave SSH no GitHub: `git clone git@github.com:bruno-superlogica/pr-audit.git ~/ferramentas/pr-audit`.
 
 O `instalar.sh`:
 1. confere os programas (git, curl, python3, node 18+, docker, gh, codex);
 2. instala o Playwright e, se você quiser, baixa o Chromium (~150 MB, uma vez);
-3. cria os links da skill em `~/.agents/skills/testar-pr` (Codex) e `~/.claude/skills/testar-pr` (Claude Code);
+3. cria os links da skill em `~/.agents/skills/pr-audit` (Codex) e `~/.claude/skills/pr-audit` (Claude Code);
 4. se você quiser, registra o Playwright MCP no Codex e no Claude Code;
 5. chama o `configurar.sh`.
 
@@ -38,13 +40,13 @@ O `configurar.sh` pergunta (tudo pode ser pulado):
 - se quer usar a tela com Playwright;
 - Metabase (avançado).
 
-A configuração fica em `~/.config/testar-pr/config.env`, com permissão só sua. O token nunca fica na pasta da skill.
+A configuração fica em `~/.config/pr-audit/config.env`, com permissão só sua. O token nunca fica na pasta da skill.
 Rode `./configurar.sh` de novo para mudar algo e `./configurar.sh --mostrar` para ver a configuração atual.
 
 ## Atualizar
 
 ```bash
-cd ~/ferramentas/testar-pr && git pull && ./instalar.sh --sem-config
+cd ~/ferramentas/pr-audit && git pull && ./instalar.sh --sem-config
 ```
 
 ## Usar
@@ -53,6 +55,12 @@ No Codex (ou no Claude Code), dentro de qualquer pasta:
 
 ```
 Testar a PR 22595 do card IMC-1824
+```
+
+Para chamar a skill pelo nome, cite `pr-audit` no pedido (ex.: "use a pr-audit na PR 22595"). Também funciona sem abrir conversa:
+
+```bash
+codex exec "use a skill pr-audit na PR 22595, card IMC-1824"
 ```
 
 A skill começa por um diagnóstico, diz o que vai conseguir fazer e segue. Antes de executar, ela pergunta se você quer usar o Playwright em cada teste e recomenda com o motivo — para API, mensagens ou cálculo conferido no banco, normalmente não compensa.
@@ -98,5 +106,5 @@ O Playwright é gratuito e local. O que custa é o modelo: cada tela lida pelo P
 ## Problemas comuns
 - **"container fora do ar"**: suba o ambiente (`docker start ...`) e rode de novo.
 - **Jira 401**: token vencido; rode `./configurar.sh` e informe um novo.
-- **Chromium não encontrado**: `cd ~/ferramentas/testar-pr && npx playwright install chromium` (se faltar biblioteca do sistema: `npx playwright install --with-deps chromium`).
+- **Chromium não encontrado**: `cd ~/ferramentas/pr-audit && npx playwright install chromium` (se faltar biblioteca do sistema: `npx playwright install --with-deps chromium`).
 - **Porta do navegador ocupada**: `QA_PORTA=9448 node scripts/tela/navegador.mjs abrir`.

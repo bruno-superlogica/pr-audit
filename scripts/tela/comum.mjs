@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {chromium} from 'playwright-core';
 
-export const CONFIG_DIR = process.env.TESTAR_PR_CONFIG_DIR || path.join(os.homedir(), '.config', 'testar-pr');
+export const CONFIG_DIR = process.env.PR_AUDIT_CONFIG_DIR || path.join(os.homedir(), '.config', 'pr-audit');
 
 function lerConfig() {
   const cfg = {};

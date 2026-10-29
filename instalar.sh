@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instala a skill testar-pr para o Codex e o Claude Code e chama a configuração inicial.
+# Instala a skill pr-audit para o Codex e o Claude Code e chama a configuração inicial.
 # Uso: ./instalar.sh            instalação completa (pode rodar de novo para atualizar)
 #      ./instalar.sh --sem-config   não chama o configurar.sh no fim
 set -u
@@ -10,7 +10,7 @@ pulo() { echo "  ⏭️  $*"; }
 falha() { echo "  ⚠️  $*"; }
 sim_nao() { local r; read -r -p "$1 [$( [ "$2" = S ] && echo 'S/n' || echo 's/N')]: " r; r="${r:-$2}"; case "$r" in [sS]*) return 0 ;; *) return 1 ;; esac; }
 
-echo "Instalando testar-pr a partir de $SKILL_DIR"
+echo "Instalando pr-audit a partir de $SKILL_DIR"
 echo
 
 echo "1) Programas"
@@ -52,16 +52,25 @@ echo
 echo "3) Registrar a skill"
 for base in "$HOME/.agents/skills" "$HOME/.claude/skills"; do
   if [ "$base" = "$HOME/.claude/skills" ] && ! tem claude && [ ! -d "$HOME/.claude" ]; then
-    pulo "Claude Code não encontrado; não criei $base/testar-pr"
+    pulo "Claude Code não encontrado; não criei $base/pr-audit"
     continue
   fi
   mkdir -p "$base"
-  if [ -e "$base/testar-pr" ] && [ ! -L "$base/testar-pr" ]; then
-    falha "$base/testar-pr já existe e não é link; renomeie a pasta antiga e rode de novo"
+  if [ -e "$base/pr-audit" ] && [ ! -L "$base/pr-audit" ]; then
+    falha "$base/pr-audit já existe e não é link; renomeie a pasta antiga e rode de novo"
   else
-    ln -sfn "$SKILL_DIR" "$base/testar-pr" && ok "$base/testar-pr → $SKILL_DIR"
+    ln -sfn "$SKILL_DIR" "$base/pr-audit" && ok "$base/pr-audit → $SKILL_DIR"
   fi
 done
+echo
+
+# Migração do nome antigo (testar-pr): remove links velhos e aproveita a configuração já feita.
+for velho in "$HOME/.agents/skills/testar-pr" "$HOME/.claude/skills/testar-pr"; do
+  [ -L "$velho" ] && rm -f "$velho" && ok "link antigo removido: $velho"
+done
+if [ -f "$HOME/.config/testar-pr/config.env" ] && [ ! -f "$CONFIG_FILE" ]; then
+  mkdir -p "$CONFIG_DIR" && cp -p "$HOME/.config/testar-pr/config.env" "$CONFIG_FILE" && ok "configuração antiga copiada de ~/.config/testar-pr"
+fi
 echo
 
 echo "4) Playwright MCP (o agente navega sozinho na tela; opcional)"

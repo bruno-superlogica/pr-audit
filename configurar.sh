@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Configuração inicial da skill testar-pr. Pode ser rodada de novo a qualquer momento.
+# Configuração inicial da skill pr-audit. Pode ser rodada de novo a qualquer momento.
 # Toda pergunta pode ser pulada (Enter vazio mantém o valor atual ou deixa sem configurar).
 # Uso: ./configurar.sh            perguntas interativas
 #      ./configurar.sh --mostrar  mostra a configuração atual (sem segredos)
@@ -37,7 +37,7 @@ sim_nao() { # sim_nao <texto> <padrão S|N>
   case "$resp" in [sS]*) return 0 ;; *) return 1 ;; esac
 }
 
-echo "Configuração da skill testar-pr"
+echo "Configuração da skill pr-audit"
 echo "Toda pergunta pode ser pulada. O que ficar de fora só reduz o que a skill entrega."
 echo
 
@@ -143,7 +143,7 @@ mkdir -p "$CONFIG_DIR"
 umask 077
 q() { printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"; }
 {
-  echo "# Configuração da skill testar-pr ($(date '+%d/%m/%Y %H:%M')). Gerado por configurar.sh."
+  echo "# Configuração da skill pr-audit ($(date '+%d/%m/%Y %H:%M')). Gerado por configurar.sh."
   for v in APPS_DIR BASE_BRANCH QA_DIR CONTAINER_APPS CONTAINER_MYSQL APPS_DIR_CONTAINER APPS_URL LIC_PADRAO \
            JIRA_URL JIRA_EMAIL JIRA_TOKEN TELA_ATIVA TELA_HEADLESS QA_PORTA METABASE_URL METABASE_API_KEY; do
     echo "$v=$(q "${!v:-}")"

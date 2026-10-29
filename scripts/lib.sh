@@ -1,8 +1,8 @@
 # shellcheck shell=bash
-# Funções comuns da skill testar-pr. Use com: . "$(dirname "$0")/lib.sh"
+# Funções comuns da skill pr-audit. Use com: . "$(dirname "$0")/lib.sh"
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG_DIR="${TESTAR_PR_CONFIG_DIR:-$HOME/.config/testar-pr}"
+CONFIG_DIR="${PR_AUDIT_CONFIG_DIR:-$HOME/.config/pr-audit}"
 CONFIG_FILE="$CONFIG_DIR/config.env"
 
 # shellcheck disable=SC1090

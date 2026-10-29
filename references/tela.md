@@ -16,7 +16,7 @@ Só quando o QA escolheu usar (SKILL.md, seção 3). O Playwright é gratuito e 
    node scripts/tela/navegador.mjs fechar           # no fim
    ```
    Comandos avulsos: `node scripts/tela/qa.mjs goto|url|texto|acoes|campos|clicar|preencher|selecionar|eval|evalf|box`.
-2. **Playwright MCP (explorar tela nova).** O agente lê a página (árvore de acessibilidade) a cada passo: bom para descobrir o caminho, caro para repetir. Depois de achar o caminho, grave uma receita e use o jeito 1 para ANTES e DEPOIS. O MCP usa outro perfil de navegador (`~/.config/testar-pr/navegador-mcp`), com login próprio.
+2. **Playwright MCP (explorar tela nova).** O agente lê a página (árvore de acessibilidade) a cada passo: bom para descobrir o caminho, caro para repetir. Depois de achar o caminho, grave uma receita e use o jeito 1 para ANTES e DEPOIS. O MCP usa outro perfil de navegador (`~/.config/pr-audit/navegador-mcp`), com login próprio.
 
 ## Formato da receita
 ```json

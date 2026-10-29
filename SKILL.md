@@ -1,9 +1,9 @@
 ---
-name: testar-pr
+name: pr-audit
 description: Apoio de QA para testar uma PR do apps (ERP imobiliário Superlógica). Monta cenários a partir do card do Jira, da PR e do impacto no código, gera plano e roteiro de teste, roda PHPUnit antes x depois, confere no banco local, executa passos de tela com Playwright quando o QA quiser e prepara o comentário de QA no card. Usar quando pedirem "testar a PR", "QA da PR", "validar o fix do card", "cenários de teste", "roteiro de teste", "cenários impactados" ou reproduzir bug de um card. Funciona com o acesso que o QA tiver; nenhum acesso é impeditivo.
 ---
 
-# Testar PR
+# PR Audit
 
 Os caminhos abaixo são relativos à pasta desta skill (onde está este `SKILL.md`). Rode os scripts por caminho completo, ex.: `<pasta-da-skill>/scripts/pr.sh`.
 
