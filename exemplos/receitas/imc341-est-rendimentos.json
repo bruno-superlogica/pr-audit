@@ -1,0 +1,4 @@
+{"nome":"imc341-est-rendimentos","passos":[
+ {"nome":"abrir rendimentos do contrato 3617/5","acao":"eval","codigo":"const l=[...document.querySelectorAll('tr')].find(t=>/3617\\/5/.test(t.innerText)); if(!l) return 'linha nao achada'; l.scrollIntoView({block:'center'}); const a=l.querySelector('a[acao=relrendimento]'); if(!a) return 'sem link'; jQuery(a).trigger('click'); return 'ok';"},
+ {"nome":"esperar","acao":"esperar","depois":{"js":"document.querySelectorAll('iframe,.ui-dialog,embed,object').length>0"},"timeout":15000}
+]}

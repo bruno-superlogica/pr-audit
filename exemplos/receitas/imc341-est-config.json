@@ -1,0 +1,4 @@
+{"nome":"imc341-est-config","passos":[
+ {"nome":"abrir configurar","acao":"clicar","alvo":{"texto":"Configurar"},"objetivoJev":"Abrir as configuracoes da DIMOB"},
+ {"nome":"achar opcao","acao":"eval","codigo":"await new Promise(r=>setTimeout(r,3000)); const t=[...document.querySelectorAll('label,span,div,td')].filter(e=>/data de repasse/i.test(e.innerText||'') && e.children.length<4); return t.slice(0,6).map(e=>e.tagName+':'+e.innerText.slice(0,120)).join(' || ')||'nao achou';"}
+]}

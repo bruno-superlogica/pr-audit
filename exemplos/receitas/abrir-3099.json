@@ -1,0 +1,21 @@
+{
+  "nome": "abrir-3099",
+  "passos": [
+    {
+      "nome": "marcar linha",
+      "acao": "eval",
+      "codigo": "const l=[...document.querySelectorAll('tr')].find(t=>/Parcela 18 de 30/.test(t.innerText)&&/292,72/.test(t.innerText)); if(!l) return 'linha nao achada'; l.scrollIntoView({block:'center'}); const c=l.querySelector('input[type=checkbox]'); if(!c.checked) c.click(); return 'ok';"
+    },
+    {
+      "nome": "abrir",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    }
+  ],
+  "atualizada": "2026-10-06T23:08:00.543Z"
+}

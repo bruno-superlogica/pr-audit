@@ -1,0 +1,69 @@
+{
+  "nome": "imc1824-c1b-87388",
+  "passos": [
+    {
+      "nome": "abrir lista filtrada",
+      "acao": "eval",
+      "recarrega": true,
+      "codigo": "location.href='/imobiliaria/despesas/index?idImovel[0]=692&dtInicioMensal=09/01/2026&dtFimMensal=09/30/2026'; await new Promise(()=>{});"
+    },
+    {
+      "nome": "marcar linha 13,46",
+      "acao": "eval",
+      "codigo": "const l=[...document.querySelectorAll('tr')].find(t=>/13,46/.test(t.innerText) && t.querySelector('input[type=checkbox]')); l.scrollIntoView({block:'center'}); const c=l.querySelector('input[type=checkbox]'); if(!c.checked) c.click(); return l.innerText.replace(/\\s+/g,' ').slice(0,160);"
+    },
+    {
+      "nome": "abrir alterar valor",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "objetivoJev": "Clicar no ícone \"Alterar valor no a pagar\" da linha marcada.",
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "estado das composicoes antes",
+      "acao": "eval",
+      "codigo": "const f=document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return [...f.querySelectorAll('[name$=\"[ID_LANCAMENTO]\"]')].map(e=>{const i=e.name.match(/\\[(\\d+)\\]/)[1]; const v=n=>f.querySelector('[name=\"COMPOSICOES['+i+']['+n+']\"]')?.value; const cb=f.querySelector('input[type=checkbox][name=\"COMPOSICOES['+i+'][FL_DIFERENCA]\"]'); return {i, id:e.value, vl:v('VL_VALOR'), recb:v('ID_RECEBIMENTO_RECB'), cc:v('TEM_REPASSE_CC'), alterou:v('FL_ALTEROUVALOR'), debito:v('ID_DEBITO'), cbMarcado:cb?.checked, cbVisivel:!!cb && getComputedStyle(cb.closest('.formRow,.form-group,.formElement')||cb.parentElement).display!=='none' && (cb.closest('.fl-diferenca-composicao')?.offsetParent!==null)};});"
+    },
+    {
+      "nome": "mudar 268766 para 20,00",
+      "acao": "eval",
+      "codigo": "const f=document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); const i=[...f.querySelectorAll('[name$=\"[ID_LANCAMENTO]\"]')].find(e=>e.value==='268766').name.match(/\\[(\\d+)\\]/)[1]; const el=f.querySelector('[name=\"COMPOSICOES['+i+'][VL_VALOR]\"]'); await window.jevPreencher(el,'20,00'); jQuery(el).trigger('blur'); await window.jevOcioso(4000); return 'indice '+i;"
+    },
+    {
+      "nome": "estado depois de mudar",
+      "acao": "eval",
+      "codigo": "const f=document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return [...f.querySelectorAll('[name$=\"[ID_LANCAMENTO]\"]')].map(e=>{const i=e.name.match(/\\[(\\d+)\\]/)[1]; const cb=f.querySelector('input[type=checkbox][name=\"COMPOSICOES['+i+'][FL_DIFERENCA]\"]'); return {id:e.value, vl:f.querySelector('[name=\"COMPOSICOES['+i+'][VL_VALOR]\"]').value, cbMarcado:cb?.checked, cbVisivel:cb?.closest('.fl-diferenca-composicao')?.offsetParent!==null};});"
+    },
+    {
+      "nome": "clicar Alterar",
+      "acao": "clicar",
+      "alvo": {
+        "seletor": "form[prefixoid$=\"alterarValorDespesaPrincipal\"] input[type=submit][name=salvar]",
+        "texto": "Alterar"
+      },
+      "depois": {
+        "js": "/Existe um repasse realizado|Atualizar parcelas futuras|sucesso/i.test(document.body.innerText)",
+        "timeout": 15000
+      }
+    },
+    {
+      "nome": "confirmar repasse realizado",
+      "acao": "eval",
+      "codigo": "const b=[...document.querySelectorAll('button')].find(x=>x.offsetParent!==null && /^Confirmar$/.test(x.innerText.trim())); if(b){jQuery(b).trigger('click'); await window.jevOcioso(8000); return 'confirmado';} return 'sem dialogo';"
+    },
+    {
+      "nome": "atualizar sem parcelas futuras",
+      "acao": "eval",
+      "codigo": "const b=[...document.querySelectorAll('button')].find(x=>x.offsetParent!==null && /^Atualizar$/.test(x.innerText.trim())); if(b){jQuery(b).trigger('click'); await window.jevOcioso(15000); return 'atualizado';} return 'sem dialogo';"
+    },
+    {
+      "nome": "mensagens",
+      "acao": "eval",
+      "codigo": "return [...document.querySelectorAll('.swal-modal,.ui-pnotify,.notificacao,.alert')].filter(e=>e.offsetParent!==null).map(e=>e.innerText.trim().slice(0,200));"
+    }
+  ]
+}

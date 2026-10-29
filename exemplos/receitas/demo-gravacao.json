@@ -1,0 +1,25 @@
+{
+  "nome": "demo-gravacao",
+  "passos": [
+    {
+      "nome": "marcar linha",
+      "acao": "eval",
+      "codigo": "const l=[...document.querySelectorAll('tr')].find(t=>/Parcela 2 de 4/.test(t.innerText)&&/73,18/.test(t.innerText)); const c=l.querySelector('input[type=checkbox]'); await window.jevMostrar(c.closest('td')||l, 'marcar: Seguro Incêndio Parcela 2 de 4'); if(!c.checked) c.click(); return 'ok';"
+    },
+    {
+      "nome": "abrir",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "esperar",
+      "acao": "esperar"
+    }
+  ],
+  "atualizada": "2026-10-07T00:31:41.244Z"
+}

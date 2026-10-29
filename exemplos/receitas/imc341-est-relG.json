@@ -1,0 +1,3 @@
+{"nome":"imc341-est-relG","passos":[
+ {"nome":"visualizar","acao":"clicar","alvo":{"texto":"Visualizar"},"objetivoJev":"Clicar no botao Visualizar do relatorio"}
+]}

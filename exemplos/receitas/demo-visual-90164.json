@@ -1,0 +1,26 @@
+{
+  "nome": "demo-visual-90164",
+  "passos": [
+    {
+      "nome": "marcar a linha da despesa",
+      "acao": "eval",
+      "destacar": "tr:has(input[type=checkbox])",
+      "codigo": "const l=[...document.querySelectorAll('tr')].find(t=>/Parcela 2 de 4/.test(t.innerText)&&/73,18/.test(t.innerText)); await window.jevMostrar(l.querySelector('input[type=checkbox]').closest('td')||l, 'marcar: linha Seguro Incêndio Parcela 2 de 4'); const c=l.querySelector('input[type=checkbox]'); if(!c.checked) c.click(); return 'ok';"
+    },
+    {
+      "nome": "abrir",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "esperar",
+      "acao": "esperar"
+    }
+  ],
+  "atualizada": "2026-10-06T23:13:08.980Z"
+}

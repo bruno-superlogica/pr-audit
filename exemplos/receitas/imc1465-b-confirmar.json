@@ -1,0 +1,5 @@
+{"nome": "imc1465-b-confirmar", "passos": [
+ {"nome": "confirmar", "acao": "clicar", "alvo": {"seletor": ".swal-button--confirm.btn-confirmar-alterar-credito"}, "depois": {"rede": "alterarcreditoterceiroimob", "timeout": 90000}},
+ {"nome": "esperar tela", "acao": "esperar", "ms": 3000},
+ {"nome": "tela final", "acao": "eval", "codigo": "return [...document.querySelectorAll('body *')].filter(e => e.children.length === 0 && e.offsetParent && /sucesso|erro|n.o pode|j. foi|n.o foi poss/i.test(e.innerText || '')).map(e => e.innerText.trim().slice(0, 300)).slice(0, 8);"}
+]}

@@ -1,0 +1,20 @@
+{
+  "nome": "card-abrir",
+  "passos": [
+    {
+      "nome": "abrir",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "esperar",
+      "acao": "esperar"
+    }
+  ],
+  "atualizada": "2026-10-07T00:38:12.472Z"
+}

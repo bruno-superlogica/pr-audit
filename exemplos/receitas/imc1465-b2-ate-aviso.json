@@ -1,0 +1,64 @@
+{
+ "nome": "imc1465-b2-beta-repassada-ate-escolher",
+ "passos": [
+  {
+   "nome": "abrir despesas do mes",
+   "acao": "eval",
+   "codigo": "location.href = 'http://localhost:8080/imobiliaria/despesas/index?dtInicioMensal=10/01/2026&dtFimMensal=10/30/2026'; return 'ok';"
+  },
+  {
+   "nome": "esperar lista",
+   "acao": "esperar",
+   "ms": 500,
+   "depois": {
+    "texto": "CCDP-EX/1",
+    "timeout": 60000
+   }
+  },
+  {
+   "nome": "marcar linha da despesa",
+   "acao": "eval",
+   "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /10\\/10\\/2026/.test(t.innerText) && /77.777,00/.test(t.innerText) && /Cr.dito terceiro/.test(t.innerText)); if (!l) return 'linha nao encontrada'; l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return l.innerText.replace(/\\s+/g,' ').slice(0,200);"
+  },
+  {
+   "nome": "abrir a despesa",
+   "acao": "clicar",
+   "alvo": {
+    "texto": "Editar lançamento principal"
+   },
+   "objetivoJev": "Abrir para edição a despesa da linha marcada (ícone Editar lançamento principal).",
+   "depois": {
+    "js": "[...document.querySelectorAll('button,a,input')].some(e => e.offsetParent && /Alterar cr.dito/i.test(e.innerText || e.value || ''))",
+    "timeout": 30000
+   },
+   "continuarSeFalhar": true
+  },
+  {
+   "nome": "botao do beta na tela",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('button,a,input')].filter(e => e.offsetParent && /Alterar cr.dito/i.test(e.innerText || e.value || '')).map(e => (e.innerText || e.value).trim());"
+  },
+  {
+   "nome": "clicar alterar credito",
+   "acao": "clicar",
+   "alvo": {
+    "seletor": "button:has-text('Alterar crédito'), a:has-text('Alterar crédito')"
+   },
+   "objetivoJev": "Clicar no botão Alterar crédito para imobiliária do formulário da despesa.",
+   "depois": {
+    "existe": ".swal-modal",
+    "timeout": 15000
+   }
+  },
+  {
+   "nome": "texto da confirmacao",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('.swal-modal')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g,' ').slice(0,600));"
+  },
+  {
+   "nome": "estado ao abrir",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('.swal-button--confirm.btn-confirmar-alterar-credito')].map(b=>b.disabled);"
+  }
+ ]
+}

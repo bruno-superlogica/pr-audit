@@ -1,0 +1,82 @@
+{
+  "nome": "imc1465-c3-pw",
+  "passos": [
+    {
+      "nome": "recarregar despesas de Ago/2026",
+      "acao": "eval",
+      "codigo": "location.href = 'http://localhost:8080/imobiliaria/despesas/index?dtInicioMensal=08/01/2026&dtFimMensal=08/31/2026'; return 'ok';"
+    },
+    {
+      "nome": "esperar lista",
+      "acao": "esperar",
+      "ms": 500,
+      "depois": {"texto": "CCDP-EX/1", "timeout": 60000}
+    },
+    {
+      "nome": "marcar linha da despesa 2617",
+      "acao": "eval",
+      "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /CCDP-EX\\/1/.test(t.innerText) && /17\\/08\\/2026/.test(t.innerText) && /Jo.o da Silva Francisco Botelho/.test(t.innerText) && /100,00/.test(t.innerText)); l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return 'linha marcada';"
+    },
+    {
+      "nome": "abrir alterar valor no a pagar",
+      "acao": "clicar",
+      "alvo": {"texto": "Alterar valor no a pagar"},
+      "objetivoJev": "Clicar no ícone \"Alterar valor no a pagar\" da linha marcada (Condomínio, CCDP-EX/1, 17/08/2026).",
+      "depois": {"existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]", "timeout": 20000}
+    },
+    {
+      "nome": "composicoes antes",
+      "acao": "eval",
+      "codigo": "const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return [...f.querySelectorAll('input')].filter(i => /COMPOSICOES\\[\\d+\\]\\[(ID_LANCAMENTO|VL_VALOR)\\]$/.test(i.name)).map(i => i.name + '=' + i.value);"
+    },
+    {
+      "nome": "lixeira da composicao de 120",
+      "acao": "clicar",
+      "alvo": {"seletor": "form[prefixoid$=\"alterarValorDespesaPrincipal\"] .subFormExcluir >> nth=1"},
+      "objetivoJev": "No formulário Alterar valor no a pagar, clicar na lixeira da composição de valor 120,00.",
+      "depois": {"js": "![...document.querySelectorAll('form[prefixoid$=\"alterarValorDespesaPrincipal\"] input')].some(i => /COMPOSICOES\\[\\d+\\]\\[VL_VALOR\\]$/.test(i.name) && i.value === '120,00')", "timeout": 8000}
+    },
+    {
+      "nome": "formulario depois da lixeira",
+      "acao": "eval",
+      "codigo": "const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return {comp: [...f.querySelectorAll('input')].filter(i => /COMPOSICOES\\[\\d+\\]\\[(ID_LANCAMENTO|VL_VALOR)\\]$/.test(i.name)).map(i => i.name + '=' + i.value), idsDeletar: (f.querySelector('[name=IDS_DELETAR]') || {}).value, totais: [...f.querySelectorAll('input')].filter(i => /^VL_(VALOR_IMOD|PAGAMENTO)$/.test(i.name)).map(i => i.name + '=' + i.value)};"
+    },
+    {
+      "nome": "salvar (Alterar)",
+      "acao": "clicar",
+      "alvo": {"texto": "Alterar"},
+      "objetivoJev": "PERMITIR_ALTERAR. Clicar no botão \"Alterar\" do formulário Alterar valor no a pagar.",
+      "depois": {"js": "[...document.querySelectorAll('.swal-modal,.modal')].some(e => e.offsetParent && /repasse e uma cobran|Aten..o/.test(e.innerText))", "timeout": 20000}
+    },
+    {
+      "nome": "aviso 1 (repasse e cobranca)",
+      "acao": "eval",
+      "codigo": "return [...document.querySelectorAll('.swal-modal,.modal')].filter(e => e.offsetParent && /repasse e uma cobran|Aten..o/.test(e.innerText)).map(e => e.innerText.replace(/\\s+/g, ' ').slice(0, 500));"
+    },
+    {
+      "nome": "confirmar aviso 1",
+      "acao": "clicar",
+      "alvo": {"texto": "Confirmar"},
+      "objetivoJev": "PERMITIR_CONFIRMAR. No aviso sobre repasse e cobrança já realizados, clicar em Confirmar.",
+      "continuarSeFalhar": true,
+      "depois": {"js": "[...document.querySelectorAll('.swal-modal,.modal')].some(e => e.offsetParent && /mensalidades futuras/.test(e.innerText))", "timeout": 20000}
+    },
+    {
+      "nome": "aviso 2 (mensalidades futuras)",
+      "acao": "eval",
+      "codigo": "return [...document.querySelectorAll('.swal-modal,.modal')].filter(e => e.offsetParent && /mensalidades futuras/.test(e.innerText)).map(e => e.innerText.replace(/\\s+/g, ' ').slice(0, 500));"
+    },
+    {
+      "nome": "atualizar sem mensalidades futuras",
+      "acao": "clicar",
+      "alvo": {"texto": "Atualizar"},
+      "objetivoJev": "PERMITIR_ATUALIZAR. No aviso Atenção sobre mensalidades futuras, deixar a opção desmarcada e clicar em Atualizar.",
+      "depois": {"js": "!document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]') || [...document.querySelectorAll('.swal-modal,.alert')].some(e => e.offsetParent && /erro|n.o pode|sucesso|salv/i.test(e.innerText))", "timeout": 60000}
+    },
+    {
+      "nome": "tela final",
+      "acao": "eval",
+      "codigo": "return {msgs: [...document.querySelectorAll('.swal-modal,.swal2-popup,.alert,.toast,.modal')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g, ' ').slice(0, 500)), formAberto: !!document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]')};"
+    }
+  ]
+}

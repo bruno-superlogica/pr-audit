@@ -1,0 +1,25 @@
+{
+  "nome": "card-imc1824-tela",
+  "passos": [
+    {
+      "nome": "marcar linha",
+      "acao": "eval",
+      "codigo": "const l=[...document.querySelectorAll('tr')].find(t=>/Água/.test(t.innerText)&&/100,00/.test(t.innerText)); const c=l.querySelector('input[type=checkbox]'); await window.jevMostrar(c.closest('td')||l, 'marcar: linha Água R$ 100,00'); if(!c.checked) c.click(); return 'ok';"
+    },
+    {
+      "nome": "abrir",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "esperar",
+      "acao": "esperar"
+    }
+  ],
+  "atualizada": "2026-10-06T23:21:14.236Z"
+}

@@ -1,0 +1,97 @@
+{
+ "nome": "imc1465-b3-beta-mista",
+ "passos": [
+  {
+   "nome": "abrir despesas do mes",
+   "acao": "eval",
+   "codigo": "location.href = 'http://localhost:8080/imobiliaria/despesas/index?dtInicioMensal=10/01/2026&dtFimMensal=10/30/2026'; return 'ok';"
+  },
+  {
+   "nome": "esperar lista",
+   "acao": "esperar",
+   "ms": 500,
+   "depois": {
+    "texto": "cobrança 1618",
+    "timeout": 60000
+   }
+  },
+  {
+   "nome": "marcar linha da despesa",
+   "acao": "eval",
+   "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /05\\/10\\/2026/.test(t.innerText) && /cobran.a 1618/.test(t.innerText) && /Cr.dito terceiro/.test(t.innerText)); if (!l) return 'linha nao encontrada'; l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return l.innerText.replace(/\\s+/g,' ').slice(0,200);"
+  },
+  {
+   "nome": "abrir a despesa",
+   "acao": "clicar",
+   "alvo": {
+    "texto": "Editar lançamento principal"
+   },
+   "objetivoJev": "Abrir para edição a despesa da linha marcada (ícone Editar lançamento principal).",
+   "depois": {
+    "js": "[...document.querySelectorAll('button,a,input')].some(e => e.offsetParent && /Alterar cr.dito/i.test(e.innerText || e.value || ''))",
+    "timeout": 30000
+   },
+   "continuarSeFalhar": true
+  },
+  {
+   "nome": "botao do beta na tela",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('button,a,input')].filter(e => e.offsetParent && /Alterar cr.dito/i.test(e.innerText || e.value || '')).map(e => (e.innerText || e.value).trim());"
+  },
+  {
+   "nome": "clicar alterar credito",
+   "acao": "clicar",
+   "alvo": {
+    "seletor": "button:has-text('Alterar crédito'), a:has-text('Alterar crédito')"
+   },
+   "objetivoJev": "Clicar no botão Alterar crédito para imobiliária do formulário da despesa.",
+   "depois": {
+    "existe": ".swal-modal",
+    "timeout": 15000
+   }
+  },
+  {
+   "nome": "texto da confirmacao",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('.swal-modal')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g,' ').slice(0,600));"
+  },
+  {
+   "nome": "esperar aviso montar",
+   "acao": "esperar",
+   "ms": 300,
+   "depois": {
+    "js": "(() => { const b = document.querySelector('.swal-button--confirm.btn-confirmar-alterar-credito'); return b && b.disabled === true; })()",
+    "timeout": 10000
+   }
+  },
+  {
+   "nome": "escolher credito destino",
+   "acao": "selecionar",
+   "alvo": {
+    "seletor": "#swal-credito-destino"
+   },
+   "valor": "3",
+   "depois": {
+    "js": "!document.querySelector('.swal-button--confirm.btn-confirmar-alterar-credito').disabled",
+    "timeout": 5000
+   }
+  },
+  {
+   "nome": "confirmar",
+   "acao": "clicar",
+   "alvo": {
+    "seletor": ".swal-button--confirm.btn-confirmar-alterar-credito"
+   },
+   "objetivoJev": "PERMITIR_CONFIRMAR PERMITIR_ALTERAR. Confirmar a alteração de crédito no aviso.",
+   "depois": {
+    "rede": "alterarcreditoterceiroimob",
+    "timeout": 90000
+   }
+  },
+  {
+   "nome": "tela final",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('body *')].filter(e => e.children.length === 0 && e.offsetParent && /sucesso|erro|n.o pode|j. foi|n.o foi poss/i.test(e.innerText || '')).map(e => e.innerText.trim().slice(0, 300)).slice(0, 8);"
+  }
+ ]
+}

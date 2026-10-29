@@ -1,0 +1,22 @@
+{
+  "nome": "imc1465-c3b-confirmar",
+  "passos": [
+    {
+      "nome": "zerar captura",
+      "acao": "eval",
+      "codigo": "window.__xhr = []; return 'ok';"
+    },
+    {
+      "nome": "confirmar aviso de repasse e cobranca",
+      "acao": "clicar",
+      "alvo": {"seletor": ".swal-modal .swal-button--confirm, .swal-modal .btn-primary, .swal2-popup .swal2-confirm"},
+      "objetivoJev": "PERMITIR_CONFIRMAR. No aviso \"Existe um repasse e uma cobrança realizados para a despesa\", clicar em Confirmar.",
+      "depois": {"js": "window.__xhr.some(x => /liquidardespesa|despesas\\//.test(x.u) && !/indexterceiro|proxy/.test(x.u))", "timeout": 60000}
+    },
+    {
+      "nome": "resposta do salvar",
+      "acao": "eval",
+      "codigo": "return {xhr: window.__xhr.filter(x => !/clarity|proxy\\/index|indexterceiro/.test(x.u)).map(x => ({u: x.u.slice(0, 140), st: x.st, b: x.b.slice(0, 1500)})), msgs: [...document.querySelectorAll('.swal-modal,.swal2-popup,.alert,.toast')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g, ' ').slice(0, 500)), formAberto: !!document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]')};"
+    }
+  ]
+}

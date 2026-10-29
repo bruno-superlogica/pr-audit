@@ -1,0 +1,95 @@
+{
+ "nome": "imc1465-antes-2601",
+ "passos": [
+  {
+   "nome": "abrir despesas do mes",
+   "acao": "eval",
+   "codigo": "location.href = 'http://localhost:8080/imobiliaria/despesas/index?dtInicioMensal=09/01/2026&dtFimMensal=09/30/2026'; return 'ok';"
+  },
+  {
+   "nome": "esperar lista",
+   "acao": "esperar",
+   "ms": 500,
+   "depois": {
+    "texto": "cobrança 1627",
+    "timeout": 60000
+   }
+  },
+  {
+   "nome": "marcar linha da despesa",
+   "acao": "eval",
+   "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /22\\/09\\/2026/.test(t.innerText) && /cobran.a 1627/.test(t.innerText) && /Cr.dito terceiro/.test(t.innerText)); if (!l) return 'linha nao encontrada'; l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return l.innerText.replace(/\\s+/g,' ').slice(0,220);"
+  },
+  {
+   "nome": "clicar icone alterar credito",
+   "acao": "clicar",
+   "alvo": {
+    "passar": "tr.Superlogica_Js_Template_Row:has(input[type=checkbox]:checked):has-text(\"Crédito terceiro\")",
+    "seletor": "tr.Superlogica_Js_Template_Row:has(input[type=checkbox]:checked):has-text(\"Crédito terceiro\") a[acao=alterarcreditoimobiliaria] img"
+   },
+   "objetivoJev": "Clicar no ícone Alterar crédito da despesa (setas) da linha marcada.",
+   "depois": {
+    "existe": ".swal-modal",
+    "timeout": 20000
+   }
+  },
+  {
+   "nome": "texto do aviso",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('.swal-modal')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g,' ').slice(0,700));"
+  },
+  {
+   "nome": "pausa leitura",
+   "acao": "esperar",
+   "ms": 2500
+  },
+  {
+   "nome": "esperar aviso montar",
+   "acao": "esperar",
+   "ms": 300,
+   "depois": {
+    "js": "(() => { const b = document.querySelector('.swal-button--confirm.btn-confirmar-alterar-credito'); return b && b.disabled === true; })()",
+    "timeout": 10000
+   }
+  },
+  {
+   "nome": "escolher imobiliaria",
+   "acao": "selecionar",
+   "alvo": {
+    "seletor": "#swal-credito-destino"
+   },
+   "valor": "3",
+   "depois": {
+    "js": "!document.querySelector('.swal-button--confirm.btn-confirmar-alterar-credito').disabled",
+    "timeout": 5000
+   }
+  },
+  {
+   "nome": "confirmar",
+   "acao": "clicar",
+   "alvo": {
+    "seletor": ".swal-button--confirm.btn-confirmar-alterar-credito"
+   },
+   "objetivoJev": "PERMITIR_CONFIRMAR. Confirmar a alteração de crédito.",
+   "depois": {
+    "rede": "alterarcreditoterceiroimob",
+    "timeout": 90000
+   }
+  },
+  {
+   "nome": "resultado",
+   "acao": "esperar",
+   "ms": 6000
+  },
+  {
+   "nome": "mensagem",
+   "acao": "eval",
+   "codigo": "return [...document.querySelectorAll('body *')].filter(e => e.children.length === 0 && e.offsetParent && /alterado para|processados|repassad|N.o . poss.vel|Erro/i.test(e.innerText || '')).map(e => e.innerText.trim().slice(0, 250));"
+  },
+  {
+   "nome": "esperar grid",
+   "acao": "esperar",
+   "ms": 3000
+  }
+ ]
+}

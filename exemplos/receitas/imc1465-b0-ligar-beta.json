@@ -1,0 +1,10 @@
+{
+  "nome": "imc1465-b0-ligar-beta",
+  "passos": [
+    {
+      "nome": "salvar config pela rota da tela Configuracoes",
+      "acao": "eval",
+      "codigo": "const loc = new Superlogica_Js_Location().setController('configuracoes').setAction('put').setApi(true).setParams({}).setParam('CONTAPESSOA_DESPESAS_ALTERAR_CREDITO_TERCEIRO', '1').toString(); const r = new Superlogica_Js_Request(loc).getResponse(); return {valido: r.isValid(), dados: JSON.stringify(r.getData ? r.getData() : r).slice(0, 400)};"
+    }
+  ]
+}

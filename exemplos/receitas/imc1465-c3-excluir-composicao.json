@@ -1,0 +1,64 @@
+{
+  "nome": "imc1465-c3-excluir-composicao",
+  "passos": [
+    {
+      "nome": "preparar captura e aceitar confirm nativo",
+      "acao": "eval",
+      "codigo": "window.__confirmes = []; window.confirm = m => { window.__confirmes.push(m); return true; }; window.__xhr = []; if (!XMLHttpRequest.prototype.__hook) { const o = XMLHttpRequest.prototype.open, s = XMLHttpRequest.prototype.send; XMLHttpRequest.prototype.open = function (m, u) { this.__u = u; this.__m = m; return o.apply(this, arguments); }; XMLHttpRequest.prototype.send = function (b) { this.addEventListener('loadend', () => { if (this.__m === 'POST' && !/8777|notific|poll/i.test(this.__u)) window.__xhr.push({u: this.__u, st: this.status, b: String(this.responseText).slice(0, 2000)}); }); return s.apply(this, arguments); }; XMLHttpRequest.prototype.__hook = 1; } return 'ok';"
+    },
+    {
+      "nome": "marcar linha da despesa 2617",
+      "acao": "eval",
+      "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /CCDP-EX\\/1/.test(t.innerText) && /17\\/08\\/2026/.test(t.innerText) && /Jo.o da Silva Francisco Botelho/.test(t.innerText) && /100,00/.test(t.innerText)); l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return 'linha marcada';"
+    },
+    {
+      "nome": "abrir alterar valor no a pagar",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "objetivoJev": "Clicar no ícone \"Alterar valor no a pagar\" da linha marcada (Condomínio, CCDP-EX/1, 17/08/2026).",
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "composicoes antes",
+      "acao": "eval",
+      "codigo": "const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return [...f.querySelectorAll('input')].filter(i => /COMPOSICOES\\[\\d+\\]\\[(ID_LANCAMENTO|VL_VALOR)\\]$/.test(i.name)).map(i => i.name + '=' + i.value);"
+    },
+    {
+      "nome": "excluir composicao de 120",
+      "acao": "eval",
+      "codigo": "const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); const v = [...f.querySelectorAll('input')].find(i => /COMPOSICOES\\[\\d+\\]\\[VL_VALOR\\]$/.test(i.name) && i.value === '120,00'); let el = v, lix = null; while (el && !lix) { el = el.parentElement; lix = el && el.querySelector('.subFormExcluir'); } jQuery(lix).trigger('click'); return {lixeira: !!lix, confirmes: window.__confirmes};",
+      "depois": {
+        "js": "(() => { const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return ![...f.querySelectorAll('input')].some(i => /COMPOSICOES\\[\\d+\\]\\[VL_VALOR\\]$/.test(i.name) && i.value === '120,00'); })()",
+        "timeout": 4000
+      }
+    },
+    {
+      "nome": "formulario depois da lixeira",
+      "acao": "eval",
+      "codigo": "const f = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"]'); return {comp: [...f.querySelectorAll('input')].filter(i => /COMPOSICOES\\[\\d+\\]\\[(ID_LANCAMENTO|VL_VALOR)\\]$/.test(i.name)).map(i => i.name + '=' + i.value), excluidas: (f.querySelector('[name=COMPOSICOES_EXCLUIDAS]') || {}).value ? 'preenchido' : 'vazio', idsDeletar: (f.querySelector('[name=IDS_DELETAR]') || {}).value, totalTela: [...f.querySelectorAll('input')].filter(i => /^VL_(VALOR_IMOD|PAGAMENTO)$/.test(i.name)).map(i => i.name + '=' + i.value)};"
+    },
+    {
+      "nome": "salvar (Alterar)",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar",
+        "tipo": "click"
+      },
+      "objetivoJev": "PERMITIR_ALTERAR. Clicar no botão \"Alterar\" do formulário Alterar valor no a pagar.",
+      "depois": {
+        "js": "window.__xhr.length > 0",
+        "timeout": 30000
+      }
+    },
+    {
+      "nome": "resposta e mensagens",
+      "acao": "eval",
+      "codigo": "return {xhr: window.__xhr.map(x => ({u: x.u.slice(0, 120), st: x.st, b: x.b.slice(0, 900)})), msgs: [...document.querySelectorAll('.swal-modal,.swal2-popup,.alert,.toast')].filter(e => e.offsetParent).map(e => e.innerText.replace(/\\s+/g, ' ').slice(0, 400)), confirmes: window.__confirmes};"
+    }
+  ],
+  "atualizada": "2026-10-16T01:08:26.148Z"
+}

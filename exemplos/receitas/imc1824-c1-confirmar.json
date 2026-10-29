@@ -1,0 +1,28 @@
+{
+  "nome": "imc1824-c1-confirmar",
+  "passos": [
+    {
+      "nome": "confirmar diálogo de repasse",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Confirmar"
+      },
+      "objetivoJev": "Clicar em \"Confirmar\" no diálogo \"Existe um repasse realizado para a despesa\".",
+      "depois": {
+        "js": "!/Existe um repasse realizado/.test(document.body.innerText)",
+        "timeout": 20000
+      }
+    },
+    {
+      "nome": "esperar",
+      "acao": "esperar",
+      "timeout": 15000
+    },
+    {
+      "nome": "mensagens na tela",
+      "acao": "eval",
+      "codigo": "return [...document.querySelectorAll('.alert, .notificacao, .ui-pnotify, .swal-text, .swal-title, .bootbox-body, .modal-body')].filter(e => e.offsetParent !== null).map(e => e.innerText.trim().slice(0, 200));"
+    }
+  ],
+  "atualizada": "2026-10-06T17:59:18.076Z"
+}

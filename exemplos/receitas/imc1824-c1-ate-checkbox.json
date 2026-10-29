@@ -1,0 +1,43 @@
+{
+  "nome": "imc1824-c1-ate-checkbox",
+  "passos": [
+    {
+      "nome": "marcar linha da despesa",
+      "acao": "eval",
+      "codigo": "const l = [...document.querySelectorAll('tr')].find(t => /Parcela 2 de 4/.test(t.innerText) && /73,18/.test(t.innerText)); l.scrollIntoView({block:'center'}); const c = l.querySelector('input[type=checkbox]'); if (!c.checked) c.click(); return 'linha marcada';"
+    },
+    {
+      "nome": "abrir alterar valor",
+      "acao": "clicar",
+      "alvo": {
+        "texto": "Alterar valor no a pagar"
+      },
+      "objetivoJev": "Clicar no ícone \"Alterar valor no a pagar\" da linha marcada.",
+      "depois": {
+        "existe": "form[prefixoid$=\"alterarValorDespesaPrincipal\"]"
+      }
+    },
+    {
+      "nome": "checkbox antes de mudar",
+      "acao": "eval",
+      "codigo": "const cb = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"] input[type=checkbox][name=\"COMPOSICOES[0][FL_DIFERENCA]\"]'); return {cbVisivel: cb.offsetParent !== null, cbMarcado: cb.checked};"
+    },
+    {
+      "nome": "mudar valor para 90,00",
+      "acao": "preencher",
+      "alvo": {
+        "seletor": "form[prefixoid$=\"alterarValorDespesaPrincipal\"] [name=\"COMPOSICOES[0][VL_VALOR]\"]"
+      },
+      "valor": "90,00",
+      "depois": {
+        "js": "(() => { const cb = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"] input[type=checkbox][name=\"COMPOSICOES[0][FL_DIFERENCA]\"]'); return cb && cb.checked; })()",
+        "timeout": 4000
+      }
+    },
+    {
+      "nome": "checkbox depois de mudar",
+      "acao": "eval",
+      "codigo": "const cb = document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"] input[type=checkbox][name=\"COMPOSICOES[0][FL_DIFERENCA]\"]'); return {cbVisivel: cb.offsetParent !== null, cbMarcado: cb.checked, total: document.querySelector('form[prefixoid$=\"alterarValorDespesaPrincipal\"] [name=VL_PAGAMENTO]').value};"
+    }
+  ]
+}
